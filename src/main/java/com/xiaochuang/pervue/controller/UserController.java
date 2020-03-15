@@ -16,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 
 /**
@@ -59,6 +61,32 @@ public class UserController {
     public ResultEntity update(@RequestBody User user){
         boolean b = iUserService.updateById(user);
         return ResultEntity.ok(b);
+    }
+
+    @RequestMapping("/login")
+    public ResultEntity login(HttpServletRequest request,String userName, String password){
+        HttpSession session = request.getSession();
+        QueryWrapper queryWrapper=new QueryWrapper();
+        queryWrapper.eq("username",userName);
+        User one = iUserService.getOne(queryWrapper);
+        if (one!=null){
+            if (one.getPassword().equals(password)){
+                session.setAttribute("user",one);
+                System.out.println(one.getName()+"@@@@@"+session.getId());
+                return ResultEntity.ok(one);
+            }
+        }
+        return ResultEntity.error(50001,"用户名或密码错误");
+    }
+    @RequestMapping("/loginOut")
+    public ResultEntity loginOut(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user!=null){
+            session.removeAttribute("user");
+            return ResultEntity.ok(true);
+        }
+        return ResultEntity.error();
     }
 }
 

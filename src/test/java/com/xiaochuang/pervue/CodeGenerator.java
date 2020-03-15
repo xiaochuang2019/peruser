@@ -60,7 +60,7 @@ public class CodeGenerator {
         //生成策略
         StrategyConfig strategyConfig = new StrategyConfig();
         //包含那些表
-        //strategyConfig.setInclude("t_book");
+        strategyConfig.setInclude("goods","goods_type","gtype");
         //strategyConfig.setExclude() 排除那些表
         //排除前缀
         //strategyConfig.setTablePrefix("t_");

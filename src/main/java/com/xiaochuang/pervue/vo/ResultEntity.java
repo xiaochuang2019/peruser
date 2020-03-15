@@ -28,4 +28,8 @@ public class ResultEntity implements Serializable {
 
         return  new ResultEntity("error",10002,null);
     }
+    public static ResultEntity error(Integer code,Object result){
+
+        return  new ResultEntity("error",10002,result);
+    }
 }
