@@ -60,10 +60,10 @@ public class CodeGenerator {
         //生成策略
         StrategyConfig strategyConfig = new StrategyConfig();
         //包含那些表
-        strategyConfig.setInclude("goods","goods_type","gtype");
+        strategyConfig.setInclude("t_type","t_scenic");
         //strategyConfig.setExclude() 排除那些表
         //排除前缀
-        //strategyConfig.setTablePrefix("t_");
+        strategyConfig.setTablePrefix("t_");
         //使用lombok 对实体Bean处理
         strategyConfig.setEntityLombokModel(true);
         //生成策略
