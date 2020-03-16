@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaochuang.pervue.mapper.ScenicMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xiaochuang.pervue.entity.Scenic">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="level" property="level" />
+        <result column="type" property="type" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="county" property="county" />
+        <result column="ticket" property="ticket" />
+        <result column="pic" property="pic" />
+        <result column="introduction" property="introduction" />
+    </resultMap>
+
+    <resultMap id="voMap" type="com.xiaochuang.pervue.entity.ScenicVo" extends="BaseResultMap">
+        <result column="provinceName" property="provinceName"></result>
+        <result column="cityName" property="cityName"></result>
+        <result column="districtName" property="districtName"></result>
+        <result property="tname" column="tname"></result>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, level, type, province, city, county, ticket, pic, introduction
+    </sql>
+    <select id="selectVo" resultMap="voMap">
+        SELECT
+	    s.*, p.province provinceName,
+        IF (c.city = '',p.province,c.city) cityName,
+        IF (d.district = '',c.city,d.district) districtName,
+				t.`name` tname
+        FROM t_scenic s
+        LEFT JOIN nation p ON s.province = p.id
+        LEFT JOIN nation c ON s.city = c.id
+        LEFT JOIN nation d ON s.county = d.id
+        LEFT JOIN t_type t ON s.type = t.id
+        <where>
+            <if test="scenicVo.level!=9 and scenicVo.level!=null">
+                s.level=#{scenicVo.level}
+            </if>
+            <if test="scenicVo.type!=0 and scenicVo.type!=null">
+               and s.type=#{scenicVo.type}
+            </if>
+        </where>
+    </select>
+
+</mapper>
